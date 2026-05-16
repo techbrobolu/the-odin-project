@@ -1,3 +1,6 @@
+let humanScore = 0;
+let computerScore = 0;
+
 function getComputerChoice() {
 	let min = 1;
 	let max = 10;
@@ -9,11 +12,13 @@ function getComputerChoice() {
 		return "paper";
 	} else if (randomInt >= 7 && randomInt <= 10) {
 		return "scissors";
+	} else {
+		return "paper";
 	}
 }
 
-function getHumanChoice(){
-	let promptInput = prompt("Choose Rock, Paper or Scissors")
+function getHumanChoice() {
+	let promptInput = prompt("Choose Rock, Paper or Scissors");
 
 	if (promptInput.toLowerCase() === "rock") {
 		return "rock";
@@ -21,10 +26,10 @@ function getHumanChoice(){
 		return "scissors";
 	} else if (promptInput.toLowerCase() === "paper") {
 		return "paper";
-	} else{
-		return "rock"
+	} else {
+		return "rock";
 	}
 }
 
 console.log(getComputerChoice());
-console.log(getHumanChoice())
+console.log(getHumanChoice());
