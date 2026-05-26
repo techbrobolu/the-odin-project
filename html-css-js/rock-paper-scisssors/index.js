@@ -1,102 +1,91 @@
+let computerChoiceImage = document.querySelector(".computer-move .choice-img");
+let humanChoiceImage = document.querySelector(".human-move .choice-img");
+let announcement = document.querySelector(".announcement");
+let humanDisplayScore = document.querySelector(".human-score");
+let computerDisplayScore = document.querySelector(".computer-score");
+let gameChoices = document.querySelector(".game-choices");
+let rockChoice = document.querySelector(".game-choice.rock");
+let paperChoice = document.querySelector(".game-choice.paper");
+let scissorsChoice = document.querySelector(".game-choice.scissors");
+let startButton = document.querySelector(".start-btn");
+let humanSelection;
+let gameRunning;
+let roundNumber;
+let roundResult;
+const MAX_ROUNDS = 5;
+
+
+startButton.addEventListener("click", () => {
+	gameRunning = true;
+	roundNumber = 0;
+	roundResult = { humanScore: 0, computerScore: 0 };
+	announcement.textContent = "Game Started! Make your move";
+	startButton.classList.add("disabled");
+	startButton.setAttribute("type", "disabled");
+});
+
+gameChoices.addEventListener("click", (e) => {
+	if (!e.target.classList.contains("game-choice")) return;
+	if (!gameRunning && roundNumber >= MAX_ROUNDS)return;
+
+	const choice =
+		e.target.classList.contains("rock") ? "rock"
+		: e.target.classList.contains("paper") ? "paper"
+		: "scissors";
+
+	humanChoiceImage.src = `assets/${choice}.svg`;
+	humanSelection = choice;
+
+	roundResult = playRound(humanSelection, roundResult);
+});
+
 function getComputerChoice() {
-	let min = 1;
-	let max = 10;
-	let randomInt = Math.floor(Math.random() * (max - min + 1)) + min;
-
-	if (randomInt >= 0 && randomInt < 4) {
-		return "rock";
-	} else if (randomInt >= 4 && randomInt < 7) {
-		return "paper";
-	} else if (randomInt >= 7 && randomInt < 10) {
-		return "scissors";
-	} else {
-		return "paper";
-	}
+	const choices = ["rock", "paper", "scissors"];
+	return choices[Math.floor(Math.random() * 3)];
 }
 
-function getHumanChoice() {
-	let promptInput = prompt("Choose Rock, Paper or Scissors");
+function decideWinner(humanChoice, computerChoice) {
+	const wins = {
+        rock: "scissors",
+        paper: "rock", 
+        scissors: "paper"
+    };
 
-	if (promptInput.toLowerCase() === "rock") {
-		return "rock";
-	} else if (promptInput.toLowerCase() === "scissors") {
-		return "scissors";
-	} else if (promptInput.toLowerCase() === "paper") {
-		return "paper";
-	} else {
-		return "rock";
+	if (computerChoice === humanChoice) {
+		return "draw";
 	}
+    
+    return wins[humanChoice] === computerChoice ? "human" : "computer";
 }
 
-function playGame() {
-	let humanSelection;
-	let computerSelection;
-	let humanScore = 0;
-	let computerScore = 0;
+function playRound(humanChoice, roundResult) {
+	let humanScore = roundResult.humanScore;
+	let computerScore = roundResult.computerScore;
+	let computerChoice = getComputerChoice();
+	computerChoiceImage.src = `assets/${computerChoice}-down.svg`;
+	let winner = decideWinner(humanChoice, computerChoice);
 
-	function playRound(humanChoice, computerChoice) {
-		if (computerChoice == "rock") {
-			if (humanChoice == "rock") {
-				humanScore += 1;
-				computerScore += 1;
-
-				console.log("That's a draw");
-			} else if (humanChoice == "paper") {
-				humanScore += 1;
-
-				console.log("You won this round! Paper beats Rock");
-			} else if (humanChoice == "scissors") {
-				computerScore += 1;
-
-				console.log("You lost this round! Rock beats Scissors");
-			}
-		} else if (computerChoice == "paper") {
-			if (humanChoice == "rock") {
-				computerScore += 1;
-
-				console.log("You lost this round! Paper beats Rock");
-			} else if (humanChoice == "paper") {
-				humanScore += 1;
-				computerScore += 1;
-
-				console.log("That's a draw");
-			} else if (humanChoice == "scissors") {
-				humanScore += 1;
-
-				console.log("You won this round! Scissors beats Paper");
-			}
-		} else if (computerChoice == "scissors") {
-			if (humanChoice == "rock") {
-				humanScore += 1;
-
-				console.log("You won this round! Rock beats Scissors");
-			} else if (humanChoice == "paper") {
-				computerScore += 1;
-
-				console.log("You lost this round! Scissors beats Paper");
-			} else if (humanChoice == "scissors") {
-				computerScore += 1;
-				humanScore += 1;
-
-				console.log("That's a draw");
-			}
-		}
+	
+	if (winner === "human") {
+		humanScore += 1;
+		announcement.textContent = "You won this round!";
+	} else if (winner === "computer") {
+		computerScore += 1;
+		announcement.textContent = "You lost this round!";
+	} else if (winner === "draw") {
+		announcement.textContent = "That's a draw";
 	}
 
-	for (let i = 0; i < 5; i++) {
-		humanSelection = getHumanChoice();
-		computerSelection = getComputerChoice();
+	humanDisplayScore.textContent = `${humanScore}`;
+	computerDisplayScore.textContent = `${computerScore}`;
 
-		playRound(humanSelection, computerSelection);
+	if (roundNumber === MAX_ROUNDS - 1) {
+		announcement.textContent = humanScore > computerScore ? "You won the game!!" : "You lost the game!!";
+		gameRunning = false;
+		startButton.classList.remove("disabled");
 	}
+	roundNumber += 1;
+	roundResult = { humanScore: humanScore, computerScore: computerScore };
 
-	if (humanScore > computerScore) {
-		alert("You're the winner!!");
-	} else if (humanScore < computerScore) {
-		alert("Oops you lost the game!!");
-	} else if (humanScore === computerScore) {
-		alert("The game was a tie!!");
-	}
+	return roundResult;
 }
-
-playGame();
