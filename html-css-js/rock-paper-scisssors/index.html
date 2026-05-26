@@ -7,6 +7,28 @@
     <title>Rock Paper Scissors</title>
 </head>
 <body>
-    
+    <!-- Display for choices and annoucements -->
+    <div class="game-board">
+        <div class="computer-choice choice">
+            <p class="player-tag">Computer</p>
+            <div class="computer-move"></div>
+        </div>
+        <div class="annoucement"></div>
+        <div class="human-choice choice">
+            <p class="player-tag">Human</p>
+            <div class="Human-move"></div>
+        </div>
+    </div>
+
+    <!-- Scoreboard and Game Control Buttons -->
+    <div class="game-controls">
+        <div class="score-board">Human: <span class="human-score">  Computer <span class="computer-score"></span></span></div>
+        <div class="game-choices">
+            <img src="assets/rock-horizontal.png" alt="rock">
+            <img src="assets/paper-horizontal.png" alt="paper">
+            <img src="assets/scissors-horizontal.png" alt="scissors">
+        </div>
+        <button class="start-btn"></button>
+    </div>
 </body>
 </html>
