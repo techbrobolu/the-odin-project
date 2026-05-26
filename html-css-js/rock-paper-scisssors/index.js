@@ -93,7 +93,9 @@ function playRound(humanChoice, roundResult) {
 
 	if (roundNumber === MAX_ROUNDS - 1) {
 		announcement.textContent =
-			humanScore > computerScore ? "You won the game!!" : "You lost the game!!";
+			humanScore > computerScore ? "You won the game!!"
+			: humanScore < computerScore ? "You lost the game!!"
+			: "The game was a tie";
 		resetGame();
 	}
 	roundNumber += 1;
