@@ -58,7 +58,7 @@ body{
     height: 100%;
 }
 
-.annoucement{
+.announcement{
     width: 100%;
     padding: 0.5rem 1rem;
     background: var(--surface);
@@ -81,6 +81,7 @@ body{
 
 .game-choice{
     width: 100%;
+    cursor: pointer;
 }
 
 .start-btn{
@@ -90,4 +91,8 @@ body{
     border: none;
     cursor: pointer;
     background: var(--surface);
+}
+
+.start-btn.disabled{
+    opacity: 0.7;
 }
