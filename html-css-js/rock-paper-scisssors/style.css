@@ -1,0 +1,93 @@
+:root{
+    --main-bg: #4DE052;
+    --surface: #FFB52B;
+    --black: #000000;
+}
+
+*, *::after, *::before{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--main-bg);
+    min-height: 100vh;
+}
+
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    width: 85%;
+    max-width: 30rem;
+}
+
+.game-board{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    width: 100%;
+}
+
+.choice{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.move{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed;
+    border-color: var(--black);
+    height: 6rem;
+    width: 6rem;
+    padding: 1rem;
+}
+
+.choice-img{
+    height: 100%;
+}
+
+.annoucement{
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background: var(--surface);
+    text-align: center;
+}
+
+.game-controls{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.game-choices{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 16rem;
+}
+
+.game-choice{
+    width: 100%;
+}
+
+.start-btn{
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    outline: var(--black);
+    border: none;
+    cursor: pointer;
+    background: var(--surface);
+}
