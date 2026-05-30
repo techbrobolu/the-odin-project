@@ -23,9 +23,9 @@ function createGrid(size) {
 			cellNum++;
 			let div = document.createElement("div");
 			div.classList.add("grid-cell", `grid-cell-${cellNum}`);
-			div.textContent = `grid-cell-${cellNum}`;
+			// div.textContent = `grid-cell-${cellNum}`;
 			div.addEventListener("mouseover", (e) => {
-				e.target.style.background = "red";
+				e.target.style.background = "black";
 			});
 			gridCanvas.appendChild(div);
 		}
