@@ -1,5 +1,6 @@
 let gridCanvas = document.querySelector(".grid-canvas");
 let resizeBtn = document.querySelector(".resize-btn");
+let gridOpacity = 0
 
 resizeBtn.addEventListener("click", () => {
 	let newSize = parseInt(prompt("What grid size do you want?"));
@@ -25,7 +26,9 @@ function createGrid(size) {
 			div.classList.add("grid-cell", `grid-cell-${cellNum}`);
 			// div.textContent = `grid-cell-${cellNum}`;
 			div.addEventListener("mouseover", (e) => {
-				e.target.style.background = "black";
+				e.target.style.background = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+				e.target.style.opacity = gridOpacity;
+                gridOpacity += 0.1;
 			});
 			gridCanvas.appendChild(div);
 		}
