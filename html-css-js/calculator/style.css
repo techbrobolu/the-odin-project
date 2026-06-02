@@ -1,0 +1,111 @@
+:root{
+    --main-bg: #DFE0E5;
+    --calc-body: #292929;
+    --calc-display: #0B0B0B;
+    --calc-working: #323232;
+    --calc-result: #FFFFFF;
+    --accent: #FFADAB;
+    --btn-border: #0B0B0B;
+    --btn-shadow-color: #454545;
+    --calc-btn-shadow: inset 0px 2px 3px 0px var(--btn-shadow-color);
+
+    --calc-body-rad: 3.75rem;
+    --calc-body-padding: 0.5rem;
+    --calc-btns-padding: 1.5rem;
+    --calc-display-up-rad: calc(var(--calc-body-rad) - var(--calc-body-padding));
+    --calc-btn-rad: calc(var(--calc-body-rad) - (var(--calc-btns-padding) + var(--calc-body-padding)));
+    --calc-btn-size: 4rem;
+    --calc-result-font: 3.5rem;
+    --calc-working-font: calc(var(--calc-result-font)/2.2);
+    --calc-btn-font: calc(var(--calc-result-font)/2);
+}
+
+*, *::before, *::after{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--main-bg);
+    font-family: 'JetBrains Mono', sans-serif;
+}
+
+.calc-body{
+    /* width: 20rem; */
+    background: var(--calc-body);
+    color: var(--accent);
+    padding: var(--calc-body-padding);
+    border-radius: 3.75rem;
+}
+
+.calc-display{
+    background-color: var(--calc-display);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    border-radius: var(--calc-display-up-rad) var(--calc-display-up-rad) 0.5rem 0.5rem;
+    padding: 1rem 2rem;
+}
+
+.calc-display .working{
+    color: var(--calc-working);
+    font-size: var(--calc-working-font);
+    text-align: right;
+    padding: 0.5rem 0;
+    border-bottom: 3px solid var(--calc-working);
+    min-width: 8rem;
+    margin-bottom: 0.5rem;
+}
+
+.calc-display .result{
+    color: var(--calc-result);
+    font-size: var(--calc-result-font);
+}
+
+.calc-buttons{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
+    gap: 1.25rem;
+    padding: var(--calc-btns-padding);
+}
+
+.calc-button{
+    width: var(--calc-btn-size);
+    height: var(--calc-btn-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--btn-border);
+    border-radius: var(--calc-btn-rad);
+    /* padding: 1rem; */
+    cursor: pointer;
+    font-size: var(--calc-btn-font);
+    box-shadow: var(--calc-btn-shadow);
+}
+
+.ac, .del{
+    font-weight: 700;
+    background-color: whitesmoke;
+    color: #292929;
+}
+
+.zero{
+    grid-column: 1/3;
+    width: 100%;
+}
+
+.equal{
+    grid-row: 4/6;
+    grid-column: 4/5;
+    height: 100%;
+    background-color: var(--accent);
+    color: var(--calc-body);
+    --btn-shadow-color: #A07F81;
+    box-shadow: inset 0px 2px 3px 0px var(--btn-shadow-color);
+}
