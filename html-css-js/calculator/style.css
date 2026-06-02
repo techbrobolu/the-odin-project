@@ -53,6 +53,7 @@ body{
 }
 
 .calc-display .working{
+    min-height: 3.3rem;
     color: var(--calc-working);
     font-size: var(--calc-working-font);
     text-align: right;
@@ -63,6 +64,7 @@ body{
 }
 
 .calc-display .result{
+    min-height: 4.625rem;
     color: var(--calc-result);
     font-size: var(--calc-result-font);
 }
