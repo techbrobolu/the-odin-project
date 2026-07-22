@@ -1,106 +1,102 @@
-const calcBtns = document.querySelector(".calc-buttons");
-const acBtn = document.querySelector(".ac");
-const delBtn = document.querySelector(".del");
 const workingDisplay = document.querySelector(".working");
-workingDisplay.textContent = "";
 const resultDisplay = document.querySelector(".result");
-resultDisplay.textContent = "0";
-let currentProblem = { firstOperand: "", operator: "", secondOperand: "" };
-let problem;
-let currentNum;
-let currentOperator;
-let currentResult;
+const calcButton = document.querySelector(".calc-buttons");
 
-const add = (a, b) => a + b;
-const subtract = (a, b) => a - b;
-const multiply = (a, b) => a * b;
-const divide = (a, b) => a / b;
-function operate(operator, a, b) {
-	switch (operator) {
+let calcOperation = {
+	add: (a, b) => a + b,
+	subtract: (a, b) => a - b,
+	multiply: (a, b) => a * b,
+	divide: (a, b) => a / b,
+};
+
+function solve(problem) {
+	switch (problem.op) {
 		case "+":
-			return add(parseInt(a), parseInt(b));
-			break;
-		case "-":
-			return subtract(parseInt(a), parseInt(b));
-			break;
+			return calcOperation.add(Number(problem.firstNum), Number(problem.secondNum));
+		case "⁻":
+			return calcOperation.subtract(Number(problem.firstNum), Number(problem.secondNum));
 		case "×":
-			return multiply(parseInt(a), parseInt(b));
-			break;
+			return calcOperation.multiply(Number(problem.firstNum), Number(problem.secondNum));
 		case "/":
-			return divide(parseInt(a), parseInt(b));
-			break;
+			return calcOperation.divide(Number(problem.firstNum), Number(problem.secondNum));
+		default:
+			return undefined;
 	}
 }
 
-calcBtns.addEventListener("click", (e) => {
-	let button = e.target;
+// For firstNum to exist, secondNum and op have to be empty
+// For operator to exist, firstNum have to be filled and secondNum has to be empty
+// For secondNum to exist, firstNum and op have to be filled
 
-	// Check if the button is a number button or an operator button
-	switch (button.classList[1]) {
+calcButton.addEventListener("click", (e) => {
+	let target = e.target;
+	let value = target.dataset.value;
+
+	if (!target.classList.contains("calc-button")) return;
+
+	switch (target.classList[1]) {
 		case "num-btn":
-			currentNum = button.dataset.value;
-			// If there's no operator selected, add the number to the first operand otherwise add it to the second operand
-			if (!currentProblem.operator) {
-				currentProblem.firstOperand += currentNum;
-			} else {
-				currentProblem.secondOperand += currentNum;
-			}
-
-			workingDisplay.textContent += currentNum;
-			currentNum = "";
+			workingDisplay.textContent += value;
 			break;
 		case "operator":
-			currentOperator = button.dataset.value;
-            // If there's no second operand, set the operator to the current operator otherwise perform the operation and set the result as the first operand and set the operator to the current operator
-			if (!currentProblem.secondOperand) {
-				currentProblem.operator = currentOperator;
-			} else {
-				problem = [
-					currentProblem.operator,
-					currentProblem.firstOperand,
-					currentProblem.secondOperand,
-				];
-				console.log(problem);
-				currentResult = operate(...problem);
-				currentProblem.firstOperand = currentResult;
-				currentProblem.operator = currentOperator;
-				currentOperator = "";
-				currentProblem.secondOperand = "";
-				console.log(currentProblem);
-			}
-
-			workingDisplay.textContent += currentProblem.operator;
+			workingDisplay.textContent += value;
 			break;
-	}
+		case "equal":
+			let currentProblem = {
+				firstNum: "",
+				op: "",
+				secondNum: "",
+			};
+			let hasOperator = false;
 
-	switch (button.dataset.value) {
-		// If the button is the equal sign, perform the operation
-		case "=":
-			problem = [
-				currentProblem.operator,
-				currentProblem.firstOperand,
-				currentProblem.secondOperand,
-			];
-            // If there's no second operand, set the result to the first operand otherwise perform the operation and set the result to the current result
-			currentResult =
-				currentProblem.secondOperand ? operate(...problem)
-				: currentProblem.firstOperand ? currentProblem.firstOperand
-				: 0;
-			let decimal = currentResult - currentResult.toFixed();
-			console.log(String(decimal).length);
-			if (decimal !== 0) {
-				resultDisplay.textContent =
-					String(decimal).length > 5 ?
-						currentResult.toFixed(4)
-					:	currentResult.toFixed(2);
-			} else {
-				resultDisplay.textContent = currentResult;
-			}
-
+			resultDisplay.textContent = workingDisplay.textContent.split("").reduce(function (
+				acc,
+				curr,
+				index,
+				arr,
+			) {
+				if (!hasOperator) {
+					if (curr == "⁻" && currentProblem.firstNum == "") {
+						currentProblem.firstNum += curr;
+					} else if (!isNaN(curr) || (curr == "." && currentProblem.firstNum !== "")) {
+						currentProblem.firstNum += curr;
+					} else if (isNaN(curr) && curr !== "⁻" && curr !== ".") {
+						currentProblem.op = curr;
+						hasOperator = true;
+					}
+				} else {
+					switch (isNaN(curr)) {
+						case true:
+							if ((curr == "⁻" && currentProblem.secondNum == "") || curr == ".") {
+                                currentProblem.secondNum += curr;
+                            } else if (curr !== "." && currentProblem.secondNum !== "") {
+                                currentProblem.firstNum = solve(currentProblem);
+                                acc = currentProblem.firstNum;
+                                currentProblem.secondNum = "";
+                                currentProblem.op = curr;
+							} else {
+								currentProblem.op = curr;
+							}
+							break;
+                        case false:
+                            currentProblem.secondNum += curr;
+                            acc = solve(currentProblem);
+							break;
+					}
+				}
+				console.log("solved");
+				console.log(acc);
+				console.log(arr);
+				console.log(currentProblem);
+				return acc;
+			}, 0);
+			break;
+		case "ac":
+			workingDisplay.textContent = "";
+			resultDisplay.textContent = "0";
+			break;
+		case "del":
+			workingDisplay.textContent = workingDisplay.textContent.slice(0, -1);
 			break;
 	}
 });
-
-// For firstnum to exist, secondnum and op have to be empty
-// For operator to exist, firstnum have to be filled and secondnum has to be empty
-// For secondnum to exist, firstnum and op have to be filled

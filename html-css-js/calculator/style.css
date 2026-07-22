@@ -16,7 +16,8 @@
     --calc-btn-rad: calc(var(--calc-body-rad) - (var(--calc-btns-padding) + var(--calc-body-padding)));
     --calc-btn-size: 4rem;
     --calc-result-font: 3.5rem;
-    --calc-working-font: calc(var(--calc-result-font)/2.2);
+    --calc-working-h: 100%;
+    --calc-working-font: 1.5rem;
     --calc-btn-font: calc(var(--calc-result-font)/2);
 }
 
@@ -54,15 +55,20 @@ body{
 }
 
 .calc-display .working{
-    min-height: 3.3rem;
+    display: flex;
+    flex-direction: row-reverse;
+    min-height: 2.75rem;
+    max-height: 2.75rem;
     color: var(--calc-working);
     font-size: var(--calc-working-font);
     text-align: right;
     padding: 0.5rem 0;
     border-bottom: 3px solid var(--calc-working);
     min-width: 8rem;
-    width: fit-content;
+    /* width: fit-content; */
+    width: 100%;
     margin-bottom: 0.5rem;
+    overflow: hidden;
 }
 
 .calc-display .result{
