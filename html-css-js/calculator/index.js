@@ -26,19 +26,23 @@ function handleSolution(problem) {
 
 	switch (problem.op) {
 		case "+":
-			result = calcOperation.add(Number(problem.firstNum), Number(problem.secondNum));
+			return calcOperation.add(Number(problem.firstNum), Number(problem.secondNum));
 			break;
 		case "-":
-			result = calcOperation.subtract(Number(problem.firstNum), Number(problem.secondNum));
+			return calcOperation.subtract(Number(problem.firstNum), Number(problem.secondNum));
 			break;
 		case "×":
-			result = calcOperation.multiply(Number(problem.firstNum), Number(problem.secondNum));
+			return calcOperation.multiply(Number(problem.firstNum), Number(problem.secondNum));
 			break;
 		case "÷":
-			result = calcOperation.divide(Number(problem.firstNum), Number(problem.secondNum));
+			if(Number(problem.firstNum) === 0 || Number(problem.secondNum) === 0){
+				return "ERROR";
+			} else{
+				return calcOperation.divide(Number(problem.firstNum), Number(problem.secondNum));
+			}
 			break;
 		default:
-			return undefined;
+			return "ERROR";
 	}
 
 	if (result.toString().includes(".") && result.toString().split(".")[1].length > 4) {
