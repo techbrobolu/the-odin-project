@@ -85,7 +85,7 @@ function handleInput(value) {
 
 		workingDisplay.textContent += value;
 	} else if (ops.includes(value)) {
-		if (problem.firstNum && problem.op && !isNaN(problem.secondNum)) {
+		if (problem.firstNum !== "" && problem.op && !isNaN(problem.secondNum)) {
 			problem.firstNum = handleSolution(problem);
 			workingDisplay.textContent = problem.firstNum;
 			resultDisplay.textContent = problem.firstNum;
@@ -114,9 +114,10 @@ function handleInput(value) {
 					workingDisplay.textContent += value;
 					break;
 				default:
-					console.log(value);
-					workingDisplay.textContent += value;
-					problem.op = value;
+					if (!isNaN(problem.firstNum) && problem.firstNum !== "") {
+						workingDisplay.textContent += value;
+						problem.op = value;
+					}
 			}
 		}
 	} else if (value === ".") {
@@ -147,11 +148,9 @@ function handleInput(value) {
 		}
 	} else if (value === "=") {
 		isSolved = true;
-		console.log(problem);
 		resultDisplay.textContent = problem.firstNum = handleSolution(problem);
 		problem.op = "";
 		problem.secondNum = "";
-		console.log(problem);
 	}
 }
 
