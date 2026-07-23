@@ -1,6 +1,12 @@
 const workingDisplay = document.querySelector(".working");
 const resultDisplay = document.querySelector(".result");
 const calcButton = document.querySelector(".calc-buttons");
+let problem = {
+	firstNum: "",
+	op: "",
+	secondNum: "",
+};
+let isSolved = false;
 
 let calcOperation = {
 	add: (a, b) => a + b,
@@ -9,18 +15,36 @@ let calcOperation = {
 	divide: (a, b) => a / b,
 };
 
-function solve(problem) {
+function handleSolution(problem) {
+	let result = 0;
+
+	if (!problem.firstNum && !problem.op && !problem.secondNum) {
+		return 0;
+	} else if (!problem.secondNum) {
+		return problem.firstNum;
+	}
+
 	switch (problem.op) {
 		case "+":
-			return calcOperation.add(Number(problem.firstNum), Number(problem.secondNum));
-		case "⁻":
-			return calcOperation.subtract(Number(problem.firstNum), Number(problem.secondNum));
+			result = calcOperation.add(Number(problem.firstNum), Number(problem.secondNum));
+			break;
+		case "-":
+			result = calcOperation.subtract(Number(problem.firstNum), Number(problem.secondNum));
+			break;
 		case "×":
-			return calcOperation.multiply(Number(problem.firstNum), Number(problem.secondNum));
-		case "/":
-			return calcOperation.divide(Number(problem.firstNum), Number(problem.secondNum));
+			result = calcOperation.multiply(Number(problem.firstNum), Number(problem.secondNum));
+			break;
+		case "÷":
+			result = calcOperation.divide(Number(problem.firstNum), Number(problem.secondNum));
+			break;
 		default:
 			return undefined;
+	}
+
+	if (result.toString().includes(".") && result.toString().split(".")[1].length > 4) {
+		return result.toFixed(2);
+	} else {
+		return result;
 	}
 }
 
@@ -28,75 +52,144 @@ function solve(problem) {
 // For operator to exist, firstNum have to be filled and secondNum has to be empty
 // For secondNum to exist, firstNum and op have to be filled
 
-calcButton.addEventListener("click", (e) => {
-	let target = e.target;
-	let value = target.dataset.value;
+function handleInput(value) {
+	let nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+	let ops = ["+", "-", "×", "÷"];
 
-	if (!target.classList.contains("calc-button")) return;
-
-	switch (target.classList[1]) {
-		case "num-btn":
-			workingDisplay.textContent += value;
-			break;
-		case "operator":
-			workingDisplay.textContent += value;
-			break;
-		case "equal":
-			let currentProblem = {
-				firstNum: "",
-				op: "",
-				secondNum: "",
-			};
-			let hasOperator = false;
-
-			resultDisplay.textContent = workingDisplay.textContent.split("").reduce(function (
-				acc,
-				curr,
-				index,
-				arr,
-			) {
-				if (!hasOperator) {
-					if (curr == "⁻" && currentProblem.firstNum == "") {
-						currentProblem.firstNum += curr;
-					} else if (!isNaN(curr) || (curr == "." && currentProblem.firstNum !== "")) {
-						currentProblem.firstNum += curr;
-					} else if (isNaN(curr) && curr !== "⁻" && curr !== ".") {
-						currentProblem.op = curr;
-						hasOperator = true;
-					}
+	if (nums.includes(value)) {
+		switch (isSolved) {
+			case true:
+				isSolved = false;
+				if (problem.op) {
+					problem.secondNum += value;
 				} else {
-					switch (isNaN(curr)) {
-						case true:
-							if ((curr == "⁻" && currentProblem.secondNum == "") || curr == ".") {
-                                currentProblem.secondNum += curr;
-                            } else if (curr !== "." && currentProblem.secondNum !== "") {
-                                currentProblem.firstNum = solve(currentProblem);
-                                acc = currentProblem.firstNum;
-                                currentProblem.secondNum = "";
-                                currentProblem.op = curr;
-							} else {
-								currentProblem.op = curr;
-							}
-							break;
-                        case false:
-                            currentProblem.secondNum += curr;
-                            acc = solve(currentProblem);
-							break;
-					}
+					workingDisplay.textContent = "";
+					resultDisplay.textContent = "0";
+					problem = {
+						firstNum: "",
+						op: "",
+						secondNum: "",
+					};
+					problem.firstNum += value;
 				}
-				console.log("solved");
-				console.log(acc);
-				console.log(arr);
-				console.log(currentProblem);
-				return acc;
-			}, 0);
-			break;
-		case "ac":
-			workingDisplay.textContent = "";
-			resultDisplay.textContent = "0";
-			break;
-		case "del":
-			workingDisplay.textContent = workingDisplay.textContent.slice(0, -1);
-			break;
+
+				break;
+			case false:
+				if (problem.op) {
+					problem.secondNum += value;
+				} else {
+					problem.firstNum += value;
+				}
+				break;
+		}
+
+		workingDisplay.textContent += value;
+	} else if (ops.includes(value)) {
+		if (problem.firstNum && problem.op && !isNaN(problem.secondNum)) {
+			problem.firstNum = handleSolution(problem);
+			workingDisplay.textContent = problem.firstNum;
+			resultDisplay.textContent = problem.firstNum;
+			problem.op = value;
+			workingDisplay.textContent += value;
+			problem.secondNum = "";
+		} else {
+			switch (value) {
+				case "+":
+					if (problem.firstNum) {
+						problem.op = value;
+						workingDisplay.textContent += value;
+					} else {
+						workingDisplay.textContent += "";
+					}
+					break;
+				case "-":
+					if (!problem.firstNum) {
+						problem.firstNum += value;
+					} else if (problem.firstNum && !problem.op) {
+						problem.op = value;
+					} else {
+						problem.secondNum += value;
+					}
+
+					workingDisplay.textContent += value;
+					break;
+				default:
+					console.log(value);
+					workingDisplay.textContent += value;
+					problem.op = value;
+			}
+		}
+	} else if (value === ".") {
+		if (problem.op && !problem.secondNum.includes(".")) {
+			problem.secondNum += value;
+		} else if(!problem.op && !problem.firstNum.includes(".")) {
+			problem.firstNum += value;
+		}
+		workingDisplay.textContent += value;
+
+	} else if (value === "ac") {
+		workingDisplay.textContent = "";
+		resultDisplay.textContent = "0";
+		problem = {
+			firstNum: "",
+			op: "",
+			secondNum: "",
+		};
+	} else if (value === "del") {
+		workingDisplay.textContent = workingDisplay.textContent.slice(0, -1);
+		if (problem.op && problem.secondNum) {
+			problem.secondNum = problem.secondNum.slice(0, -1);
+		} else if (problem.firstNum && problem.op && !problem.secondNum) {
+			problem.op = "";
+		} else {
+			problem.firstNum = problem.firstNum.slice(0, -1);
+		}
+	} else if (value === "=") {
+		isSolved = true;
+		console.log(problem);
+		resultDisplay.textContent = problem.firstNum = handleSolution(problem);
+		problem.op = "";
+		problem.secondNum = "";
+		console.log(problem);
 	}
+}
+
+document.addEventListener("keydown", (e) => {
+	const keyMap = {
+		0: "0",
+		1: "1",
+		2: "2",
+		3: "3",
+		4: "4",
+		5: "5",
+		6: "6",
+		7: "7",
+		8: "8",
+		9: "9",
+		".": ".",
+		"+": "+",
+		"-": "-",
+		"*": "×",
+		"/": "÷",
+		Enter: "=",
+		"=": "=",
+		Escape: "ac",
+		Backspace: "del",
+	};
+
+	const value = keyMap[e.key];
+	if (!value) return;
+
+	e.preventDefault();
+
+	const btn = document.querySelector(`[data-value="${value}"]`);
+	if (btn) btn.click();
+});
+
+calcButton.addEventListener("click", (e) => {
+	const btn = e.target.closest("[data-value]");
+	if (!btn) return;
+
+	const value = btn.dataset.value;
+	handleInput(value);
 });
