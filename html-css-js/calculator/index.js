@@ -122,10 +122,11 @@ function handleInput(value) {
 	} else if (value === ".") {
 		if (problem.op && !problem.secondNum.includes(".")) {
 			problem.secondNum += value;
+			workingDisplay.textContent += value;
 		} else if(!problem.op && !problem.firstNum.includes(".")) {
 			problem.firstNum += value;
+			workingDisplay.textContent += value;
 		}
-		workingDisplay.textContent += value;
 
 	} else if (value === "ac") {
 		workingDisplay.textContent = "";
