@@ -75,43 +75,45 @@ function handleInput(value) {
 }
 
 function handleNumber(value) {
-	if (isSolved && problem.secondNum !== "") {
+	if (isSolved && problem.op === "") {
 		resetProblem(value);
 	} else if (isSolved && problem.secondNum == "") {
-		updateProblem("second", value)
+		updateProblem("second", value);
 	} else if (problem.op === "" && problem.secondNum === "") {
 		updateProblem("first", value);
 	} else if (problem.op !== "") {
 		updateProblem("second", value);
 	}
 	
-	updateWorkingDisplay(value);
-	console.log("got1")
+	updateWorkingDisplay("add", value);
 }
 
 function handleOperator(value) {
 	if (value === "-" && problem.firstNum === "" && problem.op === "") {
 		updateProblem("first",value);
-		updateWorkingDisplay(value);
+		updateWorkingDisplay("add", value);
 	} else if (value === "-" && problem.op !== "" && problem.secondNum === "") {
 		updateProblem("second", value);
-		updateWorkingDisplay(value);
+		updateWorkingDisplay("add", value);
 	} else if (problem.firstNum !== "" && problem.op === "") {
 		updateProblem("op", value);
-		updateWorkingDisplay(value);
+		updateWorkingDisplay("add", value);
 	} else if (problem.firstNum !== "" && problem.op !== "" && problem.secondNum !== "") {
-		calculateResult()
+		updateWorkingDisplay("place", calculateResult())
+		updateWorkingDisplay("add", value)
 		updateProblem("op", value)
+		console.log("gotcha")
+		console.log(problem)
 	}
 }
 
 function handleDecimal(value) {
 	if (problem.op && !problem.secondNum.includes(".")) {
 		updateProblem("second", value);
-		updateWorkingDisplay(value);
+		updateWorkingDisplay("add", value);
 	} else if (!problem.op && !problem.firstNum.includes(".")) {
 		updateProblem("first", value);
-		updateWorkingDisplay(value);
+		updateWorkingDisplay("add", value);
 	}
 }
 
@@ -143,6 +145,8 @@ function calculateResult() {
 	resultDisplay.textContent = problem.firstNum = handleSolution(problem);
 	problem.op = "";
 	problem.secondNum = "";
+	
+	return problem.firstNum
 }
 
 function updateProblem(position, value) {
@@ -155,8 +159,12 @@ function updateProblem(position, value) {
 	}
 }
 
-function updateWorkingDisplay(value) {
-	workingDisplay.textContent += value;
+function updateWorkingDisplay(call, value) {
+	if (call === "add") {
+		workingDisplay.textContent += value;
+	} else if (call === "place") {
+		workingDisplay.textContent = value
+	}
 }
 
 function resetProblem(value) {
