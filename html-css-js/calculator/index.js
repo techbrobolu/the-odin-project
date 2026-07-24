@@ -1,6 +1,8 @@
 const workingDisplay = document.querySelector(".working");
 const resultDisplay = document.querySelector(".result");
 const calcButton = document.querySelector(".calc-buttons");
+const nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+const ops = ["+", "-", "×", "÷"];
 let problem = {
 	firstNum: "",
 	op: "",
@@ -57,105 +59,115 @@ function handleSolution(problem) {
 // For secondNum to exist, firstNum and op have to be filled
 
 function handleInput(value) {
-	let nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-	let ops = ["+", "-", "×", "÷"];
-
 	if (nums.includes(value)) {
-		switch (isSolved) {
-			case true:
-				isSolved = false;
-				if (problem.op) {
-					problem.secondNum += value;
-				} else {
-					workingDisplay.textContent = "";
-					resultDisplay.textContent = "0";
-					problem = {
-						firstNum: "",
-						op: "",
-						secondNum: "",
-					};
-					problem.firstNum += value;
-				}
-
-				break;
-			case false:
-				if (problem.op) {
-					problem.secondNum += value;
-				} else {
-					problem.firstNum += value;
-				}
-				break;
-		}
-
-		workingDisplay.textContent += value;
+		handleNumber(value);
 	} else if (ops.includes(value)) {
-		if (problem.firstNum !== "" && problem.op && !isNaN(problem.secondNum)) {
-			problem.firstNum = handleSolution(problem);
-			workingDisplay.textContent = problem.firstNum;
-			resultDisplay.textContent = problem.firstNum;
-			problem.op = value;
-			workingDisplay.textContent += value;
-			problem.secondNum = "";
-		} else {
-			switch (value) {
-				case "+":
-					if (problem.firstNum) {
-						problem.op = value;
-						workingDisplay.textContent += value;
-					} else {
-						workingDisplay.textContent += "";
-					}
-					break;
-				case "-":
-					if (!problem.firstNum) {
-						problem.firstNum += value;
-					} else if (problem.firstNum && !problem.op) {
-						problem.op = value;
-					} else {
-						problem.secondNum += value;
-					}
-
-					workingDisplay.textContent += value;
-					break;
-				default:
-					if (!isNaN(problem.firstNum) && problem.firstNum !== "") {
-						workingDisplay.textContent += value;
-						problem.op = value;
-					}
-			}
-		}
+		handleOperator(value);
 	} else if (value === ".") {
-		if (problem.op && !problem.secondNum.includes(".")) {
-			problem.secondNum += value;
-			workingDisplay.textContent += value;
-		} else if(!problem.op && !problem.firstNum.includes(".")) {
-			problem.firstNum += value;
-			workingDisplay.textContent += value;
-		}
-
+		handleDecimal(value);
 	} else if (value === "ac") {
-		workingDisplay.textContent = "";
-		resultDisplay.textContent = "0";
-		problem = {
-			firstNum: "",
-			op: "",
-			secondNum: "",
-		};
+		clearDisplay();
 	} else if (value === "del") {
-		workingDisplay.textContent = workingDisplay.textContent.slice(0, -1);
-		if (problem.op && problem.secondNum) {
-			problem.secondNum = problem.secondNum.slice(0, -1);
-		} else if (problem.firstNum && problem.op && !problem.secondNum) {
-			problem.op = "";
-		} else {
-			problem.firstNum = problem.firstNum.slice(0, -1);
-		}
+		deleteLastCharacter();
 	} else if (value === "=") {
-		isSolved = true;
-		resultDisplay.textContent = problem.firstNum = handleSolution(problem);
-		problem.op = "";
-		problem.secondNum = "";
+		calculateResult();
 	}
+}
+
+function handleNumber(value) {
+	if (isSolved && problem.secondNum !== "") {
+		resetProblem(value);
+	} else if (isSolved && problem.secondNum == "") {
+		updateProblem("second", value)
+	} else if (problem.op === "" && problem.secondNum === "") {
+		updateProblem("first", value);
+	} else if (problem.op !== "") {
+		updateProblem("second", value);
+	}
+	
+	updateWorkingDisplay(value);
+	console.log("got1")
+}
+
+function handleOperator(value) {
+	if (value === "-" && problem.firstNum === "" && problem.op === "") {
+		updateProblem("first",value);
+		updateWorkingDisplay(value);
+	} else if (value === "-" && problem.op !== "" && problem.secondNum === "") {
+		updateProblem("second", value);
+		updateWorkingDisplay(value);
+	} else if (problem.firstNum !== "" && problem.op === "") {
+		updateProblem("op", value);
+		updateWorkingDisplay(value);
+	} else if (problem.firstNum !== "" && problem.op !== "" && problem.secondNum !== "") {
+		calculateResult()
+		updateProblem("op", value)
+	}
+}
+
+function handleDecimal(value) {
+	if (problem.op && !problem.secondNum.includes(".")) {
+		updateProblem("second", value);
+		updateWorkingDisplay(value);
+	} else if (!problem.op && !problem.firstNum.includes(".")) {
+		updateProblem("first", value);
+		updateWorkingDisplay(value);
+	}
+}
+
+function clearDisplay() {
+	workingDisplay.textContent = "";
+	resultDisplay.textContent = "0";
+	problem = {
+		firstNum: "",
+		op: "",
+		secondNum: "",
+	};
+}
+
+function deleteLastCharacter() {
+	if(workingDisplay.textContent.length <= 0) return
+	
+	workingDisplay.textContent = workingDisplay.textContent.slice(0, -1);
+	if (problem.op && problem.secondNum) {
+		problem.secondNum = problem.secondNum.slice(0, -1);
+	} else if (problem.firstNum && problem.op && !problem.secondNum) {
+		problem.op = "";
+	} else {
+		problem.firstNum = problem.firstNum.slice(0, -1);
+	}
+}
+
+function calculateResult() {
+	isSolved = true;
+	resultDisplay.textContent = problem.firstNum = handleSolution(problem);
+	problem.op = "";
+	problem.secondNum = "";
+}
+
+function updateProblem(position, value) {
+	if (position === "first") {
+		problem.firstNum += value;
+	} else if (position === "op") {
+		problem.op = value;
+	} else if (position === "second") {
+		problem.secondNum += value;
+	}
+}
+
+function updateWorkingDisplay(value) {
+	workingDisplay.textContent += value;
+}
+
+function resetProblem(value) {
+	isSolved = false;
+	workingDisplay.textContent = value;
+	resultDisplay.textContent = "0";
+	problem = {
+		firstNum: value,
+		op: "",
+		secondNum: "",
+	};
 }
 
 document.addEventListener("keydown", (e) => {
