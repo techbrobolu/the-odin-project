@@ -14,11 +14,11 @@
     --calc-btns-padding: 1.5rem;
     --calc-display-up-rad: calc(var(--calc-body-rad) - var(--calc-body-padding));
     --calc-btn-rad: calc(var(--calc-body-rad) - (var(--calc-btns-padding) + var(--calc-body-padding)));
-    --calc-btn-size: 4rem;
+    --calc-btn-size: calc(1vw + 3rem);
     --calc-result-font: 3.5rem;
     --calc-working-h: 100%;
     --calc-working-font: 1.5rem;
-    --calc-btn-font: calc(var(--calc-result-font)/2);
+    --calc-btn-font: calc(var(--calc-btn-size)/2.5);
 }
 
 *, *::before, *::after{
