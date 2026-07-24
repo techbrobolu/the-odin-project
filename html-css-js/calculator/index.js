@@ -79,13 +79,14 @@ function handleNumber(value) {
 		resetProblem(value);
 	} else if (isSolved && problem.secondNum == "") {
 		updateProblem("second", value);
+		updateWorkingDisplay("add", value);
 	} else if (problem.op === "" && problem.secondNum === "") {
 		updateProblem("first", value);
+		updateWorkingDisplay("add", value);
 	} else if (problem.op !== "") {
 		updateProblem("second", value);
+		updateWorkingDisplay("add", value);
 	}
-	
-	updateWorkingDisplay("add", value);
 }
 
 function handleOperator(value) {
