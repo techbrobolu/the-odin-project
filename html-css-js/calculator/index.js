@@ -37,9 +37,11 @@ function handleSolution(problem) {
 			result = calcOperation.multiply(Number(problem.firstNum), Number(problem.secondNum));
 			break;
 		case "÷":
-			if(Number(problem.firstNum) === 0 || Number(problem.secondNum) === 0){
+			if(Number(problem.secondNum) === 0){
 				return "ERROR";
-			} else{
+			} else if (Number(problem.firstNum) === 0) {
+				return 0;
+			} else {
 				result = calcOperation.divide(Number(problem.firstNum), Number(problem.secondNum));
 			}
 			break;
@@ -103,8 +105,6 @@ function handleOperator(value) {
 		updateWorkingDisplay("place", calculateResult())
 		updateWorkingDisplay("add", value)
 		updateProblem("op", value)
-		console.log("gotcha")
-		console.log(problem)
 	}
 }
 
