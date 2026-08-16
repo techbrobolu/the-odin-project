@@ -12,6 +12,71 @@
 		<title>T.O.P | Sign-up Form</title>
 	</head>
 	<body>
-        
-    </body>
+		<div class="image-sidebar">
+			<img src="assets/halie-west-25xggax4bSA-unsplash.jpg" alt="plant" id="plant" />
+			<div class="logo">
+				<img src="assets/odin-lined.png" alt="odin" id="odin" />
+				<span>ODIN</span>
+			</div>
+		</div>
+		<main>
+			<p class="disclaimer">
+				This is not a real online service! You know you need something like this in your life to
+				help you realize your deepest dreams. Sign up <em>now</em> to get started. <br /><br />
+				You <em>know</em> you want to.
+			</p>
+			<div class="form-container">
+				<p>Let's do this!</p>
+				<form id="sign-up">
+					<fieldset>
+						<div>
+							<label for="first_name">FIRST NAME</label>
+							<input type="text" id="first_name" placeholder="John" required />
+						</div>
+						<div>
+							<label for="user_email">EMAIL</label>
+							<input type="email" id="user_email" placeholder="L6LXr@example.com" required />
+						</div>
+						<div>
+							<label for="user_password">PASSWORD</label>
+							<input
+								type="password"
+								id="user_password"
+								placeholder="••••••••"
+								minlength="8"
+								required />
+						</div>
+					</fieldset>
+					<fieldset>
+						<div>
+							<label for="last_name">LAST NAME</label>
+							<input type="text" id="last_name" placeholder="Doe" required />
+						</div>
+						<div>
+							<label for="user_phone">PHONE NUMBER</label>
+							<input
+								type="tel"
+								id="user_phone"
+								pattern="^\+[1-9]\d{1,14}$"
+								placeholder="+1234567890"
+                                title="Enter a valid number (e.g. +1234567890)"
+								maxlength="12"
+								required />
+						</div>
+						<div>
+							<label for="confirm_password">CONFIRM PASSWORD</label>
+							<input
+								type="password"
+								id="confirm_password"
+								placeholder="••••••••"
+								minlength="8"
+								required />
+						</div>
+					</fieldset>
+				</form>
+			</div>
+			<button type="submit" form="sign-up">Create Account</button>
+			<p class="login-link">Already have an account? <a href="#">Log in</a></p>
+		</main>
+	</body>
 </html>
