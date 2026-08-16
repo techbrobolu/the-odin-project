@@ -1,8 +1,186 @@
 @font-face {
-  font-family: 'Norsebold';
-  src: url('assets/Norsebold.woff2') format('woff2'),
-       url('assets/Norsebold.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}   
+	font-family: "Norse Bold";
+	src:
+		url("assets/Norsebold.otf") format("opentype"),
+		url("assets/Norsebold.woff2") format("woff2"),
+		url("assets/Norsebold.woff") format("woff");
+	font-weight: bold;
+	font-style: normal;
+	font-display: swap;
+}
+
+:root {
+	--main-bg: #f9fafb;
+	--main-color: #040404;
+	--logo-bg: rgba(0, 0, 0, 0.5);
+	--logo-text: #ffffff;
+	--form-bg: #ffffff;
+	--form-color: #262f3d;
+	--input-bg: #fffefe;
+	--input-bd: #e5e7eb;
+	--input-bd-focus: #1D4ED8;
+	--button-bg: #596d48;
+    --form-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+
+	--main-ff: "Roboto", sans-serif;
+	--logo-ff: "Norse Bold", sans-serif;
+	--disclaimer-text: 500 1.125rem/1.2 var(--main-ff);
+	--form-prompt-text: 500 1.25rem/1.2 var(--main-ff);
+	--input-label-text: 500 0.5rem/1.2 var(--main-ff);
+	--input-text: 400 0.7rem/1.2 var(--main-ff);
+    --btn-text: 500 0.75rem/1.2 var(--main-ff);
+    --login-link-text: 400 0.75rem/1.2 var(--main-ff);
+	--input-pd: 0.35rem;
+	--input-bd-rad: 0.25rem;
+}
+
+*,
+*::after,
+*::before {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: var(--main-ff);
+	height: 100vh;
+	background-color: var(--main-bg);
+	color: var(--main-color);
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+}
+
+.image-sidebar {
+	position: relative;
+	min-width: min(30vw, 20rem);
+	height: 100%;
+}
+
+#plant {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.logo {
+	position: absolute;
+	top: 10rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 6rem;
+	padding: 0.5rem;
+	color: var(--logo-text);
+	width: 100%;
+	background-color: var(--logo-bg);
+	font-size: 3rem;
+	font-family: var(--logo-ff);
+}
+
+#odin {
+	height: 100%;
+	margin-right: 0.25rem;
+}
+
+main {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	/* align-items: center; */
+	gap: 1rem;
+}
+
+.disclaimer {
+	font: var(--disclaimer-text);
+	margin: 1rem 2rem;
+}
+
+.form-container {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	background: var(--form-bg);
+	padding: 1rem 2rem;
+	border-radius: 0.5rem;
+	box-shadow: var(--form-shadow);
+	color: var(--form-color);
+}
+
+.form-prompt {
+	font: var(--form-prompt-text);
+}
+
+#sign-up {
+	display: flex;
+	gap: 4rem;
+}
+
+#sign-up fieldset {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	border: none;
+	width: 15rem;
+}
+
+#sign-up fieldset div {
+	display: flex;
+	flex-direction: column;
+	gap: 0.1rem;
+
+	label {
+		font: var(--input-label-text);
+		letter-spacing: 1px;
+	}
+
+	input {
+		font: var(--input-text);
+		padding: var(--input-pd);
+		border: 1px solid var(--input-bd);
+		border-radius: var(--input-bd-rad);
+		color: var(--main-color);
+	}
+
+	input:focus {
+		outline: none;
+		border-color: var(--input-bd-focus);
+        box-shadow: 2px 3px 2px rgba(0, 0, 0, 0.075);
+	}
+
+    input:user-invalid{
+        border-color: #d33a3a;
+        box-shadow: 2px 3px 2px rgba(0, 0, 0, 0.075);
+    }
+}
+
+.next-step{
+    margin: 0.5rem 2rem;
+}
+
+.create-btn{
+    /* max-width: 10rem; */
+    padding: 0.5rem 2rem;
+    border-radius: 0.25rem;
+    border: none;
+    background-color: var(--button-bg);
+    color: var(--form-bg);
+    font: var(--btn-text);
+    cursor: pointer;
+}
+
+.login-link{
+    margin: 1.5rem 0;
+    /* text-align: center; */
+    font: var(--login-link-text);
+
+    a{
+        text-decoration: none;
+        color: var(--button-bg);
+        font-weight: 600;
+    }
+}
