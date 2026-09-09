@@ -1,0 +1,146 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	/* position: relative; */
+	font-family: "Poppins", sans-serif;
+	background: #f5f5f5;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.container {
+	width: clamp(15rem, 80%, 42rem);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 3rem;
+}
+
+.books {
+	width: 100%;
+	height: 20rem;
+	padding: 1rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: left;
+	gap: 1rem;
+	border: 1px solid #0f0f0f;
+	min-height: 10rem;
+	overflow-y: auto;
+	scrollbar-width: none;
+	flex-wrap: wrap;
+}
+
+.book-card {
+	width: 9rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	text-align: center;
+	border: 1px #0f0f0f solid;
+	word-wrap: normal;
+	height: 10rem;
+	padding: 0.5rem;
+
+	h2 {
+		font-size: 0.85rem;
+	}
+	p,
+	span {
+		font-size: 0.5rem;
+	}
+
+	.book-data {
+		width: 100%;
+	}
+
+	.book-footer {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+
+		.card-buttons {
+            width: 100%;
+			display: flex;
+			justify-content: space-between;
+		}
+
+		.delete-book,
+		.change-status {
+			margin-top: 0.5rem;
+			font-size: 0.5rem;
+		}
+
+        .change-status.read{
+            background-color: blue;
+            color: #ffffff;
+        }
+
+        .change-status.unread{
+            background-color: red;
+            color: #ffffff;
+        }
+	}
+}
+
+button {
+	/* width: 8rem; */
+	background-color: #0f0f0f;
+	padding: 0.5rem 0.75rem;
+	border: none;
+	outline: none;
+	border-radius: 0.5rem;
+	color: #fff;
+	font-size: 0.75em;
+	cursor: pointer;
+}
+
+#book-form-dialog {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: none;
+}
+
+#book-form-dialog.open {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+#book-form-dialog.open .book-form {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	gap: 1rem;
+	padding: 2rem;
+	border: 1px #0f0f0f solid;
+	outline: none;
+	border-radius: 0.5rem;
+	background-color: #ffffff;
+
+	input {
+		padding: 0.25rem;
+	}
+	select {
+		padding: 0.25rem;
+	}
+}
+
+.add-book {
+	margin-top: 1.5rem;
+}

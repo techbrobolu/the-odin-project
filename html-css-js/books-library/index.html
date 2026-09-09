@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<script src="index.js" defer></script>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<h1>My Library</h1>
+		<div class="container">
+			<div class="books"></div>
+			<button class="new-book">New Book</button>
+		</div>
+		<div id="book-form-dialog">
+			<div class="book-form">
+				<label>Title: <input id="title" type="text" /></label>
+				<label>Author: <input id="author" type="text" /></label>
+				<label>Pages: <input id="pages" type="number" min="1" step="1" /></label>
+				<label
+					>Read Status:
+					<select name="read-status" id="read-status">
+						<option value="unread" selected>Unread</option>
+						<option value="read">Read</option>
+					</select>
+				</label>
+				<button class="add-book">Add Book</button>
+			</div>
+		</div>
+	</body>
+</html>
