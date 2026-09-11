@@ -22,15 +22,56 @@ const Gameboard = (() => {
 	return { getBoard, placeMarker };
 })();
 
-const GameController = () => {
+const GameController = (() => {
 	const player1 = createPlayer("Bolu", "X");
 	const player2 = createPlayer("Ada", "O");
 	let currentPlayer = player1;
 	const switchPlayer = () => {
-		if (currentPlayer === player1) {
-			currentPlayer = player2;
-		} else {
-			currentPlayer = player1;
-		}
+		currentPlayer = currentPlayer === player1 ? player2 : player1;
 	};
-};
+	const getCurrentPlayer = () => currentPlayer;
+	const getWinner = () => {
+		let board = Gameboard.getBoard();
+
+		// I'm assuming the board is a 3x3 grid like:   [0,1,2]
+		//                                              [3,4,5]
+		//                                              [6,7,8]
+		let patterns = [
+			[0, 1, 2],
+			[3, 4, 5],
+			[6, 7, 8],
+			[0, 3, 6],
+			[1, 4, 7],
+			[2, 5, 8],
+			[0, 4, 8],
+			[2, 4, 6],
+		];
+
+		for (let pattern of patterns) {
+			if (pattern.every((index) => board[index] === currentPlayer.marker)) {
+				return true;
+			}
+		}
+
+		return false;
+	};
+	const playRound = (index) => {
+		const success = Gameboard.placeMarker(index, currentPlayer.marker);
+		if (!success) return false;
+
+		let isWinner = getWinner();
+
+		if (isWinner) {
+			console.log(`Player ${currentPlayer.name} wins!`);
+			return;
+		} else if (Gameboard.getBoard().every((cell) => cell !== "")) {
+			console.log("Draw!");
+			return;
+		}
+
+		switchPlayer();
+		return true;
+	};
+
+	return { getCurrentPlayer, playRound };
+})();
