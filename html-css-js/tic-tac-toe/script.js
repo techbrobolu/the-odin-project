@@ -21,3 +21,16 @@ const Gameboard = (() => {
 
 	return { getBoard, placeMarker };
 })();
+
+const GameController = () => {
+	const player1 = createPlayer("Bolu", "X");
+	const player2 = createPlayer("Ada", "O");
+	let currentPlayer = player1;
+	const switchPlayer = () => {
+		if (currentPlayer === player1) {
+			currentPlayer = player2;
+		} else {
+			currentPlayer = player1;
+		}
+	};
+};
