@@ -1,13 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T.O.S | Tic-Tac-Toe</title>
-    <script src="script.js" defer></script>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>T.O.S | Tic-Tac-Toe</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+			rel="stylesheet" />
+		<script src="script.js" defer></script>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<header>
+			<h1 class="project-header">Tic-Tac-Toe</h1>
+		</header>
+		<main>
+			<div class="board">
+				<div class="cell"></div>
+				<div class="cell"></div>
+				<div class="cell"></div>
+				<div class="cell"></div>
+				<div class="cell"></div>
+				<div class="cell"></div>
+				<div class="cell"></div>
+				<div class="cell"></div>
+				<div class="cell"></div>
+			</div>
+			<div class="announcement">Player 1 wins!!</div>
+			<div class="scores">
+				<div class="player player-1">
+					<div class="player-1 name">Player 1</div>
+					<div class="player-score">0</div>
+				</div>
+				<div class="tie">
+					<div class="name">Tie</div>
+					<div class="score">0</div>
+				</div>
+				<div class="player player-2">
+					<div class="name">Player 2</div>
+					<div class="score">0</div>
+				</div>
+			</div>
+		</main>
+		<div class="start-overlay">
+			<form id="player-names">
+				<div class="player">
+					<label for="player-1"> Player 1 </label>
+					<input id="player-1" type="text" required />
+				</div>
+				<div class="player">
+					<label for="player-2"> Player 2 </label>
+					<input id="player-2" type="text-area" required />
+				</div>
+			</form>
+			<button class="start-btn" type="submit" form="player-names">Start</button>
+		</div>
+	</body>
 </html>

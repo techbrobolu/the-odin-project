@@ -62,15 +62,19 @@ const GameController = (() => {
 		let isWinner = getWinner();
 
 		if (isWinner) {
-			console.log(`Player ${currentPlayer.name} wins!`);
-			return;
-		} else if (Gameboard.getBoard().every((cell) => cell !== "")) {
-			console.log("Draw!");
-			return;
+			currentPlayer.increasePlayerScore()
+			return { status: "win", winner: currentPlayer };
 		}
-
+		if (Gameboard.getBoard().every((cell) => cell !== "")) {
+			return { status: "draw" };
+		}
 		switchPlayer();
-		return true;
+		return { status: "continue" };
+	};
+	
+	const resetGame = () => {
+		board = ["", "", "", "", "", "", "", "", ""];
+		currentPlayer = player1;
 	};
 
 	return { getCurrentPlayer, playRound };
