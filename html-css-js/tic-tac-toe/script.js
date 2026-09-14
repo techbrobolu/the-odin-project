@@ -50,7 +50,6 @@ const GameController = (() => {
 	let gameRunning = false;
 	let tie = 0;
 	let currentPlayer = player1;
-	DisplayController.updatePlayerTurn(currentPlayer);
 	const createPlayers = () => {
 		player1 = createPlayer(player1NameInput.value, "X");
 		player2 = createPlayer(player2NameInput.value, "O");
@@ -103,15 +102,15 @@ const GameController = (() => {
 		let isWinner = getWinner();
 
 		if (isWinner) {
-			currentPlayer.increasePlayerScore();
+			let winner = currentPlayer;
+			winner.increasePlayerScore();
 			DisplayController.updatePlayerScores();
-			let announceTime = setInterval(() => {
-				DisplayController.announceDecision({ status: "win", winner: currentPlayer });
-				clearInterval(announceTime);
+			setTimeout(() => {
+				DisplayController.announceDecision({ status: "win", winner: winner });
 			}, 3000);
 
 			resetGame();
-			return `${currentPlayer.name} wins!!`;
+			return `${winner.name} wins!!`;
 		}
 		if (Gameboard.getBoard().every((cell) => cell !== "")) {
 			tie++;
@@ -120,7 +119,6 @@ const GameController = (() => {
 			resetGame();
 			return "It's a tie!!";
 		}
-
 
 		switchPlayer();
 		return "continue";
@@ -140,6 +138,7 @@ const GameController = (() => {
 		tie = 0;
 		DisplayController.resetBoard();
 		DisplayController.resetScores();
+		DisplayController.updatePlayerTurn(player1);
 	};
 
 	const startGame = () => {
@@ -147,6 +146,7 @@ const GameController = (() => {
 		createPlayers();
 		gameRunning = true;
 		DisplayController.updatePlayerNames();
+		DisplayController.updatePlayerTurn(player1);
 		restartGame();
 		startOverlay.classList.remove("open");
 	};
