@@ -33,6 +33,7 @@ const Gameboard = (() => {
 		if (board[index] === "") {
 			board[index] = marker;
 			DisplayController.updateBoard(target, marker);
+			DisplayController.updateBoard(target, marker);
 			return true;
 		} else {
 			return false;
@@ -59,6 +60,7 @@ const GameController = (() => {
 	const getPlayers = () => [player1, player2];
 	const switchPlayer = () => {
 		currentPlayer = getCurrentPlayer() === player1 ? player2 : player1;
+		DisplayController.updatePlayerTurn(currentPlayer);
 		DisplayController.updatePlayerTurn(currentPlayer);
 	};
 	const getCurrentPlayer = () => currentPlayer;
@@ -124,6 +126,7 @@ const GameController = (() => {
 
 		switchPlayer();
 		return "continue";
+		return "continue";
 	};
 
 	const resetGame = () => {
@@ -140,19 +143,26 @@ const GameController = (() => {
 		tie = 0;
 		DisplayController.resetBoard();
 		DisplayController.resetScores();
+		DisplayController.resetBoard();
+		DisplayController.resetScores();
 	};
 
 	const startGame = () => {
 		// Called when start button is clicked
 		createPlayers();
+		createPlayers();
 		gameRunning = true;
 		DisplayController.updatePlayerNames();
+		DisplayController.updatePlayerNames();
 		restartGame();
+		startOverlay.classList.remove("open");
 		startOverlay.classList.remove("open");
 	};
 
 	const newGame = () => {
 		// Called when new button is clicked
+		resetGameStatus();
+		startOverlay.classList.add("open");
 		resetGameStatus();
 		startOverlay.classList.add("open");
 	};
@@ -223,16 +233,20 @@ const DisplayController = (() => {
 	const updatePlayerTurn = (player) => {
 		// Called every time a player makes a move
 		roundTurn.textContent = `${player.name}'s turn`;
+		roundTurn.textContent = `${player.name}'s turn`;
 	};
 
 	return {
 		updatePlayerNames,
 		updatePlayerScores,
 		updateTieScore,
+		updatePlayerScores,
+		updateTieScore,
 		resetScores,
 		announceDecision,
 		updateBoard,
 		resetBoard,
+		updatePlayerTurn,
 		updatePlayerTurn,
 	};
 })();
