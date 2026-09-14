@@ -34,6 +34,29 @@ main {
 	align-items: center;
 	gap: 1rem;
 	width: fit-content;
+
+	.control-buttons {
+		display: flex;
+		gap: 1rem;
+
+		button {
+			border: none;
+			outline: none;
+			font: inherit;
+			font-size: calc(var(--player-name-font-size) * 0.8);
+			padding: calc(var(--player-name-font-size) * 0.4) var(--player-name-font-size);
+			border-radius: var(--player-name-font-size);
+			cursor: pointer;
+		}
+		.new-btn{
+			color: #ffffff;
+			background-color: #334155;
+		}
+		.restart-btn {
+			color: #0f172a;
+			background-color: #ffffff;
+		}
+	}
 }
 
 .board {
@@ -63,7 +86,8 @@ main {
 	background: #334155;
 }
 
-.announcement, .round-turn{
+.announcement,
+.round-turn {
 	font-size: var(--player-name-font-size);
 	color: #ffffff;
 }
@@ -136,6 +160,10 @@ main {
 				outline: none;
 			}
 		}
+	}
+
+	.error-message.open {
+		color: red;
 	}
 
 	.start-btn {

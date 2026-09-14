@@ -28,7 +28,7 @@
 				<div class="cell" data-index="7"></div>
 				<div class="cell" data-index="8"></div>
 			</div>
-			<div class="announcement">Player 1 wins!!</div>
+			<div class="announcement"></div>
 			<div class="scores">
 				<div class="player player-1">
 					<div class="player-1 name">Player 1</div>
@@ -44,6 +44,10 @@
 				</div>
 			</div>
 			<div class="round-turn">Player 1's Turn</div>
+			<div class="control-buttons">
+				<button class="new-btn">New Game</button>
+				<button class="restart-btn">Restart</button>
+			</div>
 		</main>
 		<div class="start-overlay open">
 			<form id="player-names">
@@ -55,6 +59,7 @@
 					<label for="player-2"> Player 2 </label>
 					<input id="player-2" type="text-area" required />
 				</div>
+				<div class="error-message"></div>
 			</form>
 			<button class="start-btn" type="submit" form="player-names">Start</button>
 		</div>

@@ -4,6 +4,7 @@ const player2NameInput = document.querySelector("#player-2");
 const player1Name = document.querySelector(".player-1 .name");
 const player2Name = document.querySelector(".player-2 .name");
 const startButton = document.querySelector(".start-btn");
+const inputErrorMessage = document.querySelector("#player-names .error-message");
 const player1Score = document.querySelector(".player-1 .score");
 const player2Score = document.querySelector(".player-2 .score");
 const tieScore = document.querySelector(".tie .score");
@@ -11,7 +12,8 @@ const announcement = document.querySelector(".announcement");
 const gameboard = document.querySelector(".board");
 const cell = document.querySelectorAll(".cell");
 const roundTurn = document.querySelector(".round-turn");
-const restartButton = document.querySelector(".restart-button");
+const newButton = document.querySelector(".new-btn")
+const restartButton = document.querySelector(".restart-btn");
 let player1;
 let player2;
 
@@ -49,7 +51,7 @@ const Gameboard = (() => {
 const GameController = (() => {
 	let gameRunning = false;
 	let tie = 0;
-	let currentPlayer = player1;
+	let currentPlayer;
 	const createPlayers = () => {
 		player1 = createPlayer(player1NameInput.value, "X");
 		player2 = createPlayer(player2NameInput.value, "O");
@@ -105,9 +107,14 @@ const GameController = (() => {
 			let winner = currentPlayer;
 			winner.increasePlayerScore();
 			DisplayController.updatePlayerScores();
-			setTimeout(() => {
-				DisplayController.announceDecision({ status: "win", winner: winner });
+			DisplayController.announceDecision({ status: "win", winner: winner });
+			resetGameStatus();
+
+			let announceDelay = setInterval(() => {
 				resetGame();
+				clearInterval(announceDelay);
+				gameRunning = true;
+				switchPlayer();
 			}, 3000);
 
 			return `${winner.name} wins!!`;
@@ -115,9 +122,14 @@ const GameController = (() => {
 		if (Gameboard.getBoard().every((cell) => cell !== "")) {
 			tie++;
 			DisplayController.updateTieScore(tie);
-			setTimeout(() => {
-				DisplayController.announceDecision({ status: "draw" });
+			DisplayController.announceDecision({ status: "draw" });
+			resetGameStatus();
+			
+			let announceDelay = setInterval(() => {
 				resetGame();
+				clearInterval(announceDelay);
+				gameRunning = true;
+				switchPlayer();
 			}, 3000);
 
 			return "It's a tie!!";
@@ -131,7 +143,6 @@ const GameController = (() => {
 		// Called when new game is started or restarted
 		Gameboard.resetBoard();
 		DisplayController.resetBoard();
-		currentPlayer = player1;
 	};
 
 	const restartGame = () => {
@@ -142,14 +153,17 @@ const GameController = (() => {
 		tie = 0;
 		DisplayController.resetBoard();
 		DisplayController.resetScores();
-		DisplayController.updatePlayerTurn(player1);
+		currentPlayer = player1
+		DisplayController.updatePlayerTurn(currentPlayer);
 	};
+
 
 	const startGame = () => {
 		// Called when start button is clicked
 		createPlayers();
 		gameRunning = true;
 		DisplayController.updatePlayerNames();
+		currentPlayer = player1
 		DisplayController.updatePlayerTurn(player1);
 		restartGame();
 		startOverlay.classList.remove("open");
@@ -158,6 +172,9 @@ const GameController = (() => {
 	const newGame = () => {
 		// Called when new button is clicked
 		resetGameStatus();
+		restartGame();
+		player1NameInput.value = ""
+		player2NameInput.value = ""
 		startOverlay.classList.add("open");
 	};
 
@@ -201,12 +218,17 @@ const DisplayController = (() => {
 
 	const announceDecision = (decision) => {
 		// Called when game ends to decide winner or tie
-		let message =
-			decision.status === "win"
-				? `${decision.winner.name} wins!!`
-				: decision.status === "draw"
-					? "It's a tie!!"
-					: "";
+		console.log(decision);
+		let message;
+		if (decision.status === "win") {
+			message = `${decision.winner.name} won this round!!`;
+			console.log(message);
+		} else if (decision.status === "draw") {
+			message = "This round is a tie!!";
+		} else {
+			message = "";
+		}
+
 		announcement.textContent = message;
 	};
 
@@ -240,3 +262,36 @@ const DisplayController = (() => {
 		updatePlayerTurn,
 	};
 })();
+
+startButton.addEventListener("click", (e) => {
+	e.preventDefault();
+	if (GameController.getGameStatus()) return;
+	if (!player1NameInput.value || !player2NameInput.value) {
+		inputErrorMessage.classList.add("open");
+		inputErrorMessage.textContent = !player1NameInput.value
+			? "Enter Player 1 Name !!"
+			: !player2NameInput.value
+				? "Enter Player 2 Name !!"
+				: "";
+		return;
+	}
+	GameController.startGame();
+	inputErrorMessage.classList.remove("open");
+});
+
+gameboard.addEventListener("click", (e) => {
+	let target = e.target;
+	if (GameController.getGameStatus()) {
+		GameController.playRound(target);
+	} else {
+		return;
+	}
+});
+
+newButton.addEventListener("click", (e) => {
+	GameController.newGame()
+})
+
+restartButton.addEventListener("click", (e) => {
+	GameController.restartGame()
+})
