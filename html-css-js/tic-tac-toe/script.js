@@ -121,6 +121,7 @@ const GameController = (() => {
 			return "It's a tie!!";
 		}
 
+
 		switchPlayer();
 		return "continue";
 	};
