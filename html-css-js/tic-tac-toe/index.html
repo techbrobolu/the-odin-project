@@ -18,21 +18,21 @@
 		</header>
 		<main>
 			<div class="board">
-				<div class="cell"></div>
-				<div class="cell"></div>
-				<div class="cell"></div>
-				<div class="cell"></div>
-				<div class="cell"></div>
-				<div class="cell"></div>
-				<div class="cell"></div>
-				<div class="cell"></div>
-				<div class="cell"></div>
+				<div class="cell" data-index="0"></div>
+				<div class="cell" data-index="1"></div>
+				<div class="cell" data-index="2"></div>
+				<div class="cell" data-index="3"></div>
+				<div class="cell" data-index="4"></div>
+				<div class="cell" data-index="5"></div>
+				<div class="cell" data-index="6"></div>
+				<div class="cell" data-index="7"></div>
+				<div class="cell" data-index="8"></div>
 			</div>
 			<div class="announcement">Player 1 wins!!</div>
 			<div class="scores">
 				<div class="player player-1">
 					<div class="player-1 name">Player 1</div>
-					<div class="player-score">0</div>
+					<div class="score">0</div>
 				</div>
 				<div class="tie">
 					<div class="name">Tie</div>
@@ -43,8 +43,9 @@
 					<div class="score">0</div>
 				</div>
 			</div>
+			<div class="round-turn">Player 1's Turn</div>
 		</main>
-		<div class="start-overlay">
+		<div class="start-overlay open">
 			<form id="player-names">
 				<div class="player">
 					<label for="player-1"> Player 1 </label>
