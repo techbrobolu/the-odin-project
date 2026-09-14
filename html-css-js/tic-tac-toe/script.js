@@ -115,7 +115,10 @@ const GameController = (() => {
 		if (Gameboard.getBoard().every((cell) => cell !== "")) {
 			tie++;
 			DisplayController.updateTieScore(tie);
-			DisplayController.announceDecision({ status: "draw" });
+			setTimeout(() => {
+				DisplayController.announceDecision({ status: "draw" })
+			}, 3000);
+			
 			resetGame();
 			return "It's a tie!!";
 		}
