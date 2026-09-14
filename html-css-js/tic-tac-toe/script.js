@@ -1,3 +1,4 @@
+const startOverlay = document.querySelector(".start-overlay");
 const player1NameInput = document.querySelector("#player-1");
 const player2NameInput = document.querySelector("#player-2");
 const player1Name = document.querySelector(".player-1 .name");
@@ -27,9 +28,11 @@ const createPlayer = (name, marker) => {
 const Gameboard = (() => {
 	let board = ["", "", "", "", "", "", "", "", ""];
 	const getBoard = () => board;
-	const placeMarker = (index, marker) => {
+	const placeMarker = (target, marker) => {
+		let index = Number(target.dataset.index);
 		if (board[index] === "") {
 			board[index] = marker;
+			DisplayController.updateBoard(target, marker);
 			return true;
 		} else {
 			return false;
@@ -47,9 +50,16 @@ const GameController = (() => {
 	let gameRunning = false;
 	let tie = 0;
 	let currentPlayer = player1;
+	DisplayController.updatePlayerTurn(currentPlayer);
+	const createPlayers = () => {
+		player1 = createPlayer(player1NameInput.value, "X");
+		player2 = createPlayer(player2NameInput.value, "O");
+	};
+
+	const getPlayers = () => [player1, player2];
 	const switchPlayer = () => {
 		currentPlayer = getCurrentPlayer() === player1 ? player2 : player1;
-		currentPlayer = getCurrentPlayer() === player1 ? player2 : player1;
+		DisplayController.updatePlayerTurn(currentPlayer);
 	};
 	const getCurrentPlayer = () => currentPlayer;
 	const getTieScore = () => tie;
@@ -84,28 +94,36 @@ const GameController = (() => {
 
 		return false;
 	};
-	const playRound = (index) => {
+	const playRound = (target) => {
 		// Called every time a player makes a move
 		// Called every time a player makes a move
-		const success = Gameboard.placeMarker(index, currentPlayer.marker);
+		const success = Gameboard.placeMarker(target, currentPlayer.marker);
 		if (!success) return false;
 
 		let isWinner = getWinner();
 
 		if (isWinner) {
 			currentPlayer.increasePlayerScore();
-			currentPlayer.increasePlayerScore();
-			return { status: "win", winner: currentPlayer };
+			DisplayController.updatePlayerScores();
+			let announceTime = setInterval(() => {
+				DisplayController.announceDecision({ status: "win", winner: currentPlayer });
+				clearInterval(announceTime);
+			}, 3000);
+
+			resetGame();
+			return `${currentPlayer.name} wins!!`;
 		}
 		if (Gameboard.getBoard().every((cell) => cell !== "")) {
 			tie++;
-			tie++;
-			return { status: "draw" };
+			DisplayController.updateTieScore(tie);
+			DisplayController.announceDecision({ status: "draw" });
+			resetGame();
+			return "It's a tie!!";
 		}
-		switchPlayer();
-		return { status: "continue" };
-	};
 
+		switchPlayer();
+		return "continue";
+	};
 
 	const resetGame = () => {
 		// Called when new game is started or restarted
@@ -119,22 +137,27 @@ const GameController = (() => {
 		player1.resetPlayerScore();
 		player2.resetPlayerScore();
 		tie = 0;
+		DisplayController.resetBoard();
+		DisplayController.resetScores();
 	};
 
 	const startGame = () => {
 		// Called when start button is clicked
+		createPlayers();
 		gameRunning = true;
+		DisplayController.updatePlayerNames();
 		restartGame();
+		startOverlay.classList.remove("open");
 	};
 
 	const newGame = () => {
 		// Called when new button is clicked
-		resetGameStatus;
+		resetGameStatus();
+		startOverlay.classList.add("open");
 	};
 
 	return {
-		player1,
-		player2,
+		getPlayers,
 		getCurrentPlayer,
 		playRound,
 		resetGame,
@@ -154,11 +177,14 @@ const DisplayController = (() => {
 		player2Name.textContent = player2NameInput.value;
 	};
 
-	const updateScores = () => {
+	const updatePlayerScores = () => {
 		// Called every time a win or tie is decided
-		player1Score.textContent = GameController.player1.getPlayerScore();
-		player2Score.textContent = GameController.player2.getPlayerScore();
-		tieScore.textContent = GameController.getTieScore();
+		player1Score.textContent = GameController.getPlayers()[0].getPlayerScore();
+		player2Score.textContent = GameController.getPlayers()[1].getPlayerScore();
+	};
+
+	const updateTieScore = (score) => {
+		tieScore.textContent = score;
 	};
 
 	const resetScores = () => {
@@ -168,9 +194,8 @@ const DisplayController = (() => {
 		tieScore.textContent = 0;
 	};
 
-	const announceDecision = (target) => {
+	const announceDecision = (decision) => {
 		// Called when game ends to decide winner or tie
-		let decision = GameController.playRound(target.dataset.index);
 		let message =
 			decision.status === "win"
 				? `${decision.winner.name} wins!!`
@@ -194,19 +219,19 @@ const DisplayController = (() => {
 		announcement.textContent = "";
 	};
 
-	const updateRoundTurn = () => {
+	const updatePlayerTurn = (player) => {
 		// Called every time a player makes a move
-		roundTurn.textContent = `${GameController.getCurrentPlayer().name}'s turn`;
+		roundTurn.textContent = `${player.name}'s turn`;
 	};
 
 	return {
 		updatePlayerNames,
-		updateScores,
+		updatePlayerScores,
+		updateTieScore,
 		resetScores,
 		announceDecision,
 		updateBoard,
 		resetBoard,
-		updateRoundTurn,
+		updatePlayerTurn,
 	};
 })();
-
