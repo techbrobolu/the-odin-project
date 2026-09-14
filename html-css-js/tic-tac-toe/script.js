@@ -107,19 +107,19 @@ const GameController = (() => {
 			DisplayController.updatePlayerScores();
 			setTimeout(() => {
 				DisplayController.announceDecision({ status: "win", winner: winner });
+				resetGame();
 			}, 3000);
 
-			resetGame();
 			return `${winner.name} wins!!`;
 		}
 		if (Gameboard.getBoard().every((cell) => cell !== "")) {
 			tie++;
 			DisplayController.updateTieScore(tie);
 			setTimeout(() => {
-				DisplayController.announceDecision({ status: "draw" })
+				DisplayController.announceDecision({ status: "draw" });
+				resetGame();
 			}, 3000);
-			
-			resetGame();
+
 			return "It's a tie!!";
 		}
 
@@ -130,6 +130,7 @@ const GameController = (() => {
 	const resetGame = () => {
 		// Called when new game is started or restarted
 		Gameboard.resetBoard();
+		DisplayController.resetBoard();
 		currentPlayer = player1;
 	};
 
