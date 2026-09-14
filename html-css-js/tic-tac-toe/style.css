@@ -63,7 +63,8 @@ main {
 	background: #334155;
 }
 
-.announcement{
+.announcement, .round-turn{
+	font-size: var(--player-name-font-size);
 	color: #ffffff;
 }
 
