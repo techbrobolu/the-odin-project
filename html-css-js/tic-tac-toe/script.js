@@ -18,9 +18,11 @@ const createPlayer = (name, marker) => {
 	let score = 0;
 	const getPlayerScore = () => score;
 	const resetPlayerScore = () => (score = 0);
+	const resetPlayerScore = () => (score = 0);
 	const increasePlayerScore = () => {
 		score++;
 	};
+	return { name, marker, getPlayerScore, increasePlayerScore, resetPlayerScore };
 	return { name, marker, getPlayerScore, increasePlayerScore, resetPlayerScore };
 };
 
@@ -49,6 +51,7 @@ const GameController = (() => {
 	let currentPlayer = player1;
 	const switchPlayer = () => {
 		currentPlayer = getCurrentPlayer() === player1 ? player2 : player1;
+		currentPlayer = getCurrentPlayer() === player1 ? player2 : player1;
 	};
 	const getCurrentPlayer = () => currentPlayer;
 	const getTieScore = () => tie;
@@ -57,6 +60,7 @@ const GameController = (() => {
 		gameRunning = false;
 	};
 	const getWinner = () => {
+		// Called every time a player makes a move
 		// Called every time a player makes a move
 		let board = Gameboard.getBoard();
 
@@ -84,6 +88,7 @@ const GameController = (() => {
 	};
 	const playRound = (index) => {
 		// Called every time a player makes a move
+		// Called every time a player makes a move
 		const success = Gameboard.placeMarker(index, currentPlayer.marker);
 		if (!success) return false;
 
@@ -91,15 +96,18 @@ const GameController = (() => {
 
 		if (isWinner) {
 			currentPlayer.increasePlayerScore();
+			currentPlayer.increasePlayerScore();
 			return { status: "win", winner: currentPlayer };
 		}
 		if (Gameboard.getBoard().every((cell) => cell !== "")) {
+			tie++;
 			tie++;
 			return { status: "draw" };
 		}
 		switchPlayer();
 		return { status: "continue" };
 	};
+
 
 	const resetGame = () => {
 		// Called when new game is started or restarted
@@ -203,3 +211,4 @@ const DisplayController = (() => {
 		updateRoundTurn,
 	};
 })();
+
