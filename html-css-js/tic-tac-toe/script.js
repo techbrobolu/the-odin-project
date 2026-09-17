@@ -12,7 +12,7 @@ const announcement = document.querySelector(".announcement");
 const gameboard = document.querySelector(".board");
 const cell = document.querySelectorAll(".cell");
 const roundTurn = document.querySelector(".round-turn");
-const newButton = document.querySelector(".new-btn")
+const newButton = document.querySelector(".new-btn");
 const restartButton = document.querySelector(".restart-btn");
 let player1;
 let player2;
@@ -31,10 +31,9 @@ const Gameboard = (() => {
 	let board = ["", "", "", "", "", "", "", "", ""];
 	const getBoard = () => board;
 	const placeMarker = (target, marker) => {
-		let index = Number(target.dataset.index);
+		const index = Number(target.dataset.index);
 		if (board[index] === "") {
 			board[index] = marker;
-			DisplayController.updateBoard(target, marker);
 			return true;
 		} else {
 			return false;
@@ -52,6 +51,20 @@ const GameController = (() => {
 	let gameRunning = false;
 	let tie = 0;
 	let currentPlayer;
+	let announceTimeout;
+	const announceDelayCallback = () => {
+		resetGame();
+		gameRunning = true;
+		switchPlayer();
+	};
+	const startTimeout = (callback, delay) => {
+		// clear any existing timeout first (optional, depending on your needs)
+		if (announceTimeout !== undefined) {
+			clearTimeout(announceTimeout);
+		}
+		announceTimeout = setTimeout(callback, delay);
+	};
+  
 	const createPlayers = () => {
 		player1 = createPlayer(player1NameInput.value, "X");
 		player2 = createPlayer(player2NameInput.value, "O");
@@ -70,8 +83,7 @@ const GameController = (() => {
 	};
 	const getWinner = () => {
 		// Called every time a player makes a move
-		// Called every time a player makes a move
-		let board = Gameboard.getBoard();
+		const board = Gameboard.getBoard();
 
 		// I'm assuming the board is a 3x3 grid like:   [0,1,2]
 		//                                              [3,4,5]
@@ -97,25 +109,21 @@ const GameController = (() => {
 	};
 	const playRound = (target) => {
 		// Called every time a player makes a move
-		// Called every time a player makes a move
 		const success = Gameboard.placeMarker(target, currentPlayer.marker);
 		if (!success) return false;
+
+		DisplayController.updateBoard(target, currentPlayer.marker);
 
 		let isWinner = getWinner();
 
 		if (isWinner) {
-			let winner = currentPlayer;
+			const winner = currentPlayer;
 			winner.increasePlayerScore();
 			DisplayController.updatePlayerScores();
 			DisplayController.announceDecision({ status: "win", winner: winner });
 			resetGameStatus();
 
-			let announceDelay = setInterval(() => {
-				resetGame();
-				clearInterval(announceDelay);
-				gameRunning = true;
-				switchPlayer();
-			}, 3000);
+			startTimeout(announceDelayCallback, 2000);
 
 			return `${winner.name} wins!!`;
 		}
@@ -124,13 +132,8 @@ const GameController = (() => {
 			DisplayController.updateTieScore(tie);
 			DisplayController.announceDecision({ status: "draw" });
 			resetGameStatus();
-			
-			let announceDelay = setInterval(() => {
-				resetGame();
-				clearInterval(announceDelay);
-				gameRunning = true;
-				switchPlayer();
-			}, 3000);
+
+			startTimeout(announceDelayCallback, 2000);
 
 			return "It's a tie!!";
 		}
@@ -141,6 +144,7 @@ const GameController = (() => {
 
 	const resetGame = () => {
 		// Called when new game is started or restarted
+		clearInterval(announceTimeout);
 		Gameboard.resetBoard();
 		DisplayController.resetBoard();
 	};
@@ -151,30 +155,28 @@ const GameController = (() => {
 		player1.resetPlayerScore();
 		player2.resetPlayerScore();
 		tie = 0;
-		DisplayController.resetBoard();
 		DisplayController.resetScores();
-		currentPlayer = player1
+		currentPlayer = player1;
 		DisplayController.updatePlayerTurn(currentPlayer);
 	};
-
 
 	const startGame = () => {
 		// Called when start button is clicked
 		createPlayers();
+		startOverlay.classList.remove("open");
 		gameRunning = true;
 		DisplayController.updatePlayerNames();
-		currentPlayer = player1
+		currentPlayer = player1;
 		DisplayController.updatePlayerTurn(player1);
 		restartGame();
-		startOverlay.classList.remove("open");
 	};
 
 	const newGame = () => {
 		// Called when new button is clicked
 		resetGameStatus();
 		restartGame();
-		player1NameInput.value = ""
-		player2NameInput.value = ""
+		player1NameInput.value = "";
+		player2NameInput.value = "";
 		startOverlay.classList.add("open");
 	};
 
@@ -266,7 +268,7 @@ const DisplayController = (() => {
 startButton.addEventListener("click", (e) => {
 	e.preventDefault();
 	if (GameController.getGameStatus()) return;
-	if (!player1NameInput.value || !player2NameInput.value) {
+	if (!player1NameInput.value.trim() || !player2NameInput.value.trim()) {
 		inputErrorMessage.classList.add("open");
 		inputErrorMessage.textContent = !player1NameInput.value
 			? "Enter Player 1 Name !!"
@@ -281,6 +283,12 @@ startButton.addEventListener("click", (e) => {
 
 gameboard.addEventListener("click", (e) => {
 	let target = e.target;
+	console.log(target);
+	console.log(target.classList);
+	console.log(target.classList.contains("cell"));
+	console.log(GameController.getGameStatus());
+
+	if (!target.classList.contains("cell")) return;
 	if (GameController.getGameStatus()) {
 		GameController.playRound(target);
 	} else {
@@ -289,9 +297,9 @@ gameboard.addEventListener("click", (e) => {
 });
 
 newButton.addEventListener("click", (e) => {
-	GameController.newGame()
-})
+	GameController.newGame();
+});
 
 restartButton.addEventListener("click", (e) => {
-	GameController.restartGame()
-})
+	GameController.restartGame();
+});
