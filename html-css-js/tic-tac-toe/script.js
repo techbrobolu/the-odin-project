@@ -10,7 +10,7 @@ const player2Score = document.querySelector(".player-2 .score");
 const tieScore = document.querySelector(".tie .score");
 const announcement = document.querySelector(".announcement");
 const gameboard = document.querySelector(".board");
-const cell = document.querySelectorAll(".cell");
+const boardCells = document.querySelectorAll(".cell");
 const roundTurn = document.querySelector(".round-turn");
 const newButton = document.querySelector(".new-btn");
 const restartButton = document.querySelector(".restart-btn");
@@ -144,7 +144,7 @@ const GameController = (() => {
 
 	const resetGame = () => {
 		// Called when new game is started or restarted
-		clearInterval(announceTimeout);
+		clearTimeout(announceTimeout);
 		Gameboard.resetBoard();
 		DisplayController.resetBoard();
 	};
@@ -241,7 +241,7 @@ const DisplayController = (() => {
 
 	const resetBoard = () => {
 		// Called when start or restart button is clicked or game ends
-		cell.forEach((cell) => {
+		boardCells.forEach((cell) => {
 			cell.textContent = "";
 		});
 
@@ -270,9 +270,9 @@ startButton.addEventListener("click", (e) => {
 	if (GameController.getGameStatus()) return;
 	if (!player1NameInput.value.trim() || !player2NameInput.value.trim()) {
 		inputErrorMessage.classList.add("open");
-		inputErrorMessage.textContent = !player1NameInput.value
+		inputErrorMessage.textContent = !player1NameInput.value.trim()
 			? "Enter Player 1 Name !!"
-			: !player2NameInput.value
+			: !player2NameInput.value.trim()
 				? "Enter Player 2 Name !!"
 				: "";
 		return;
@@ -282,11 +282,7 @@ startButton.addEventListener("click", (e) => {
 });
 
 gameboard.addEventListener("click", (e) => {
-	let target = e.target;
-	console.log(target);
-	console.log(target.classList);
-	console.log(target.classList.contains("cell"));
-	console.log(GameController.getGameStatus());
+	const target = e.target;
 
 	if (!target.classList.contains("cell")) return;
 	if (GameController.getGameStatus()) {
