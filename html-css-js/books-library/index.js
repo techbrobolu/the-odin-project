@@ -8,13 +8,15 @@ const pagesInput = document.querySelector("#pages");
 const readStatusInput = document.querySelector("#read-status");
 const myLibrary = [];
 
-function Book(bookTitle, bookAuthor, pages, readStatus) {
+class Book {
 	// the constructor...
-	this.id = crypto.randomUUID();
-	this.title = bookTitle;
-	this.author = bookAuthor;
-	this.pages = pages;
-	this.read = readStatus;
+	constructor(bookTitle, bookAuthor, pages, readStatus){
+		this.id = crypto.randomUUID();
+		this.title = bookTitle;
+		this.author = bookAuthor;
+		this.pages = pages;
+		this.read = readStatus;
+	}
 }
 
 function addBookToLibrary(bookTitle, bookAuthor, pages, readStatus) {
@@ -95,6 +97,8 @@ function displayBooks() {
 	myLibrary.map((book) => createBookCard(book));
 }
 
+
+//A few initial books for the UI
 addBookToLibrary("The First Family", "David Baldacci", 500, true);
 addBookToLibrary("1984", "George Orwell", 500, false);
 addBookToLibrary("To Kill a Mockingbird", "Harper Lee", 345, true);
